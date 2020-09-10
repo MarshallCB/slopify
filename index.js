@@ -1,7 +1,8 @@
 var PNG = require("pngjs").PNG;
 var fs = require('fs-extra');
 
-let pixelDepth = (r,g,b) => (r+g+b)/3
+//TODO #1: Divide by 2.55 is kinda arbitrary to have values [0,100]
+let pixelDepth = (r,g,b) => (r+g+b)/3/2.55
 let fence = (min,x,max) => Math.min(max, Math.max(min, x))
 let pixelIndex = (x, y, width, height) => {
   x = fence(x, 0, width - 1);
@@ -21,8 +22,12 @@ let pixelIndex = (x, y, width, height) => {
  *
  *  dz/dx = ((c + 2f + i) - (a + 2d + g) / (8 * x_cellsize)
  *  dz/dy = ((g + 2h + i) - (a + 2b + c)) / (8 * y_cellsize)
+ * 
+ * TODO #1: Not sure what cell_size is, but makes a difference
+ * 
+ * From: http://www.gisagmaps.com/neighborhood-slope/
  */
-let getSlope = (elevations, cell_size = 3) => {
+let getSlope = (elevations, cell_size = 5) => {
   let [a, b, c, d, e, f, g, h, i] = elevations;
   let dzdx = (c + 2 * f + i - (a + 2 * d + g)) / (8 * cell_size);
   let dzdy = (g + 2 * h + i - (a + 2 * b + c)) / (8 * cell_size);
@@ -32,7 +37,7 @@ let getSlope = (elevations, cell_size = 3) => {
   return {
     dx: dzdx,
     dy: dzdy,
-    direction: dir
+    dir
   };
 };
 
@@ -69,7 +74,7 @@ module.exports = function slopify(input, output, options){
               localElevations[localIdx] = pixelDepth.apply(null, neighborRGB);
             }
           }
-          let { dx, dy } = getSlope(localElevations, kernel);
+          let { dx, dy } = getSlope(localElevations);
           // RED
           slopemap.data[idx+0] = 127 * (1 - dx)
           // GREEN

@@ -5,16 +5,12 @@ const pkg = require('./package.json')
 const path = require('path')
 const slopify = require('./index.js');
 
-sade('slopify [input]', true)
+sade('slopify [input] [output]', true)
 .version(pkg.version)
 .describe(pkg.description)
-.example('slopify depth.png -o terrain.png')
-.option('-o, --output', 'Output filepath', "terrain.png")
+.example('slopify depth.png terrain.png')
 .option('-k, --kernel', 'Kernel size', 3)
-.action((input, opts) => {
-  // TODO: smarter output default
-  slopify(input, opts.output, {
-    kernel: opts.kernel
-  })
+.action((input, output, opts) => {
+  slopify(input, output, opts)
 })
 .parse(process.argv);

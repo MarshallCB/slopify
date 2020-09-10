@@ -1,0 +1,38 @@
+{
+  "version": "0.0.1",
+  "name": "slopify",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marshallcb/slopify.git"
+  },
+  "description": "Convert depth maps to terrain maps",
+  "bin": {
+    "slopify": "./cli.js"
+  },
+  "main": "index.js",
+  "license": "MIT",
+  "author": {
+    "name": "Marshall Brandt",
+    "email": "hey@m4r.sh",
+    "url": "https://m4r.sh"
+  },
+  "engines": {
+    "node": ">= 10"
+  },
+  "keywords": [
+    "slope",
+    "dudv",
+    "terrain",
+    "wind",
+    "depth",
+    "png",
+    "node"
+  ],
+  "dependencies": {
+    "fs-extra": "^9.0.1",
+    "sade": "^1.7.3",
+    "pngjs": "^5.0.0",
+    "sharp": "^0.25.4",
+    "ucompress": "^0.20.3"
+  }
+}
